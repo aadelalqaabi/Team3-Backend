@@ -1,14 +1,9 @@
 const express = require("express");
 const passport = require("passport");
+const upload = require("../../middleware/multer");
 const router = express.Router();
 
-const {
-  register,
-  login,
-  getUsers,
-  fetchUser,
-  tripsCreate,
-} = require("./users.controllers");
+const { register, login, getUsers, fetchUser } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
   const user = await fetchUser(userId, next);
@@ -22,8 +17,7 @@ router.param("userId", async (req, res, next, userId) => {
   }
 });
 
-router.post("/:userId/trips", tripsCreate);
-router.post("/register", register);
+router.post("/register", upload.single("image"), register);
 router.post(
   "/login",
   passport.authenticate("local", { session: false }),

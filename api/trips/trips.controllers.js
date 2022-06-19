@@ -1,4 +1,5 @@
 const Trip = require("../../models/Trip");
+const User = require("../../models/User");
 
 exports.getTrips = async (req, res, next) => {
   try {
@@ -6,6 +7,22 @@ exports.getTrips = async (req, res, next) => {
     res.status(201).json(trips);
   } catch (err) {
     next(err);
+  }
+};
+
+exports.tripsCreate = async (req, res, next) => {
+  req.body.userId = req.user._id;
+  if (req.file) {
+    req.body.image = `/uploads/${req.file.filename}`;
+  }
+  try {
+    const newTrip = await Trip.create(req.body);
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { trips: newTrip._id },
+    });
+    res.status(201).json(newTrip);
+  } catch (error) {
+    next(error);
   }
 };
 
