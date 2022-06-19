@@ -2,6 +2,7 @@ const connectDb = require("./database");
 const express = require("express");
 const app = express();
 const userRoutes = require("./api/users/users.routes");
+const tripRoutes = require("./api/trips/trips.routes");
 const passport = require("passport");
 const cors = require("cors");
 const { localStrategy, jwtStrategy } = require("./middleware/passport");
@@ -13,6 +14,7 @@ app.use(passport.initialize());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 app.use(userRoutes);
+app.use("/trips", tripRoutes);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
