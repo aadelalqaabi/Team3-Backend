@@ -3,7 +3,13 @@ const passport = require("passport");
 const upload = require("../../middleware/multer");
 const router = express.Router();
 
-const { register, login, getUsers, fetchUser } = require("./users.controllers");
+const {
+  register,
+  login,
+  getUsers,
+  fetchUser,
+  updateUser,
+} = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
   const user = await fetchUser(userId, next);
@@ -23,5 +29,6 @@ router.post(
   passport.authenticate("local", { session: false }),
   login
 );
+router.put("/:userId", upload.single("image"), updateUser);
 router.get("/users", getUsers);
 module.exports = router;

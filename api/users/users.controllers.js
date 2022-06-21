@@ -71,3 +71,12 @@ exports.fetchUser = async (userId, next) => {
     next(err);
   }
 };
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.user._id, req.body);
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};
