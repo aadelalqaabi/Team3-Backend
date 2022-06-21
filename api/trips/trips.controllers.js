@@ -28,7 +28,7 @@ exports.tripsCreate = async (req, res, next) => {
 
 exports.updateTrip = async (req, res, next) => {
   try {
-    await Trip.findByIdAndUpdate(req.trip.id, req.body);
+    await Trip.findByIdAndUpdate(req.trip._id, req.body);
     res.status(204).end();
   } catch (err) {
     next(err);
@@ -37,7 +37,7 @@ exports.updateTrip = async (req, res, next) => {
 
 exports.deleteTrip = async (req, res, next) => {
   try {
-    await Trip.findByIdAndRemove({ _id: req.trip.id });
+    await Trip.findByIdAndRemove({ _id: req.trip._id });
     res.status(204).end();
   } catch (err) {
     next(err);
