@@ -12,6 +12,9 @@ exports.login = async (req, res, next) => {
     const payload = {
       id: user.id,
       username: user.username,
+      image: user.image,
+      bio: user.bio,
+      trips: user.trips,
       exp: Date.now() + JWT_EXPIRATION_MS,
     };
     const token = jwt.sign(payload, JWT_SECRET);
@@ -25,6 +28,9 @@ const generateToken = (user) => {
   const payload = {
     id: user.id,
     username: user.username,
+    image: user.image,
+    bio: user.bio,
+    trips: user.trips,
     exp: Date.now() + JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, JWT_SECRET);
