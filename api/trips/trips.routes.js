@@ -32,7 +32,7 @@ router.post(
 
 router.delete("/:tripId", deleteTrip);
 
-router.put("/:tripId", updateTrip);
+router.put("/:tripId", upload.single("image"), updateTrip);
 
 router.get("/", getTrips);
 
