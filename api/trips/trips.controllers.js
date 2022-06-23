@@ -28,8 +28,13 @@ exports.tripsCreate = async (req, res, next) => {
 
 exports.updateTrip = async (req, res, next) => {
   try {
-    await Trip.findByIdAndUpdate(req.trip._id, req.body);
-    res.status(204).end();
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
+    const trip = await Trip.findByIdAndUpdate(req.trip._id, req.body, {
+      new: true,
+    });
+    res.status(200).json(trip);
   } catch (err) {
     next(err);
   }

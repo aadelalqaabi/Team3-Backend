@@ -2,9 +2,6 @@ const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
-const Trip = require("../../models/Trip");
-const fs = require("fs");
-const path = require("path");
 
 exports.login = async (req, res, next) => {
   try {
@@ -40,9 +37,6 @@ const generateToken = (user) => {
 exports.register = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
-  if (req.file) {
-    req.body.image = `/uploads/${req.file.filename}`;
-  }
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
@@ -74,8 +68,13 @@ exports.fetchUser = async (userId, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
-    await User.findByIdAndUpdate(req.user._id, req.body);
-    res.status(204).end();
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    }).select("-password");
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }
